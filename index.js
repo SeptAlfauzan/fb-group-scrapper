@@ -162,15 +162,25 @@ async function autoScroll(page, browser) {
 	let postDates = [];
 	try {
 		let lastPostDate = '30 April 2022';
+		let dummyDate = '';
 		while (new Date(lastPostDate).getTime() > new Date('1 January 2020 00:00').getTime()) {
 			var distance = 100;
 			await newPage.evaluate(`window.scrollBy(0, ${distance})`);
 
 			// const delay = Math.floor(Math.random() * 500) + 400;
 			await wait(300);
+
+
 			// if (new Date(lastPostDate).getTime() >= new Date('1 Januari').getTime())
 			postDates = await newPage.evaluate(function () {
-				return [...document.querySelectorAll('._52jc._5qc4._78cz._24u0._36xo>a>abbr')].map(name => name.textContent.replace(' pukul', '').replace('.', ':'));
+				return [...document.querySelectorAll('.story_body_container')].map(date => {
+					let res;
+					const child = date.querySelector('header > div > div > div > div > div > a >abbr');
+					const childAlternate = date.querySelector('._3q6s._78cw > header > div > div > a > abbr');
+
+					child ? res = child : res = childAlternate;
+					return res.textContent.replace(' pukul', '').replace('.', ':')
+				});
 			});
 
 			arrLastPostDate = String(postDates[postDates.length - 1]).split(' ');
@@ -203,7 +213,15 @@ async function autoScroll(page, browser) {
 			return res;
 		});
 
-		const postdates = [...document.querySelectorAll('._52jc._5qc4._78cz._24u0._36xo>a>abbr')].map(name => name.textContent.replace(' pukul', '').replace('.', ':'));
+		const postdates = [...document.querySelectorAll('.story_body_container')].map(date => {
+			let res;
+			const child = date.querySelector('header > div > div > div > div > div > a >abbr');
+			const childAlternate = date.querySelector('._3q6s._78cw > header > div > div > a > abbr');
+
+			child ? res = child : res = childAlternate;
+			return res.textContent.replace(' pukul', '').replace('.', ':')
+		});
+		// const postdates = [...document.querySelectorAll('._52jc._5qc4._78cz._24u0._36xo>a>abbr')].map(name => name.textContent.replace(' pukul', '').replace('.', ':'));
 
 		const contents = [...document.querySelectorAll('._5rgt._5nk5._5msi')].map(name => name.textContent);
 
