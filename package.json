@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "puppeteer-core": "^13.7.0"
+  },
+  "devDependencies": {
+    "objects-to-csv-file": "^1.0.1"
+  }
+}
